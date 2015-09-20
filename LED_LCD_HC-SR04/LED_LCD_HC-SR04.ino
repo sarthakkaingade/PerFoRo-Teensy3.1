@@ -24,6 +24,8 @@ const int ECHO = 1;  // ECHO
 long distance;
 long cm;
 char incomingByte;
+char incomingStream[10];
+int i=0;
 
 void sense_sonar();
 void sense_serial();
@@ -64,11 +66,19 @@ void sense_sonar()  {
 
 void sense_serial()  {
   if (Serial.available() > 0) {
-  incomingByte = Serial.read();
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print("Data rec: ");
-  lcd.print(incomingByte);
+    incomingByte = Serial.read();
+    if ( incomingByte == 32 || i == 10 ) {
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("Data: ");
+      for ( int j = 0; j < i; j++ )  {
+        lcd.print(incomingStream[j]);
+      }
+      i = 0;
+    } else {
+      incomingStream[i] = incomingByte;
+      i++;
+    }
   }
 }
 
