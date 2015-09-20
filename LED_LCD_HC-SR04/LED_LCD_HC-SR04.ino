@@ -57,21 +57,22 @@ void sense_sonar()  {
   delay(20);
   Serial.print("Distance in cms = ");
   Serial.println(cm);
+  lcd.setCursor(0, 1);
+  lcd.print("Distance(cm)=");
+  lcd.print(cm);
 }
 
 void sense_serial()  {
   if (Serial.available() > 0) {
   incomingByte = Serial.read();
-  lcd.print("Serial Data received: ");
   lcd.clear();
   lcd.setCursor(0, 0);
+  lcd.print("Data rec: ");
   lcd.print(incomingByte);
   }
 }
 
 void toggle_led()  {
-  lcd.setCursor(0, 1);
-  lcd.print(cm);
   digitalWrite(ledPin, HIGH);
   delay(100);
   digitalWrite(ledPin, LOW);
