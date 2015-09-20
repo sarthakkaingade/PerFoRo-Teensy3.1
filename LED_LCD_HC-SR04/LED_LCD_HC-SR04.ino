@@ -24,6 +24,7 @@ const int TRIG = 0; // TRIGGER
 const int ECHO = 1;  // ECHO
 long distance;
 long cm;
+char incomingByte;
 
 void setup() {
   // set up the LCD's number of columns and rows: 
@@ -48,7 +49,17 @@ void loop() {
   delay(20);
   Serial.print("Distance in cms = ");
   Serial.println(cm);
-  
+        
+  if (Serial.available() > 0) {
+  incomingByte = Serial.read();
+  lcd.print("Serial Data received: ");
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  // print the number of seconds since reset:
+  lcd.print(incomingByte);
+  }
+
+
   // set the cursor to column 0, line 1
   // (note: line 1 is the second row, since counting begins with 0):
   lcd.setCursor(0, 1);
