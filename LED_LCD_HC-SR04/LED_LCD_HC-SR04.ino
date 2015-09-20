@@ -16,7 +16,6 @@ The circuit:
 // include the library code:
 #include <LiquidCrystal.h>
 
-
 // initialize the library with the numbers of the interface pins
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 const int ledPin =  13;
@@ -26,6 +25,10 @@ long distance;
 long cm;
 char incomingByte;
 
+void sense_sonar();
+void sense_serial();
+void toggle_led();
+  
 void setup() {
   // set up the LCD's number of columns and rows: 
   lcd.begin(16, 2);
@@ -38,7 +41,12 @@ void setup() {
 }
 
 void loop() {
-  
+  sense_sonar();
+  sense_serial();
+  toggle_led();
+}
+
+void sense_sonar()  {
   digitalWrite(TRIG, LOW);
   delayMicroseconds(2);
   digitalWrite(TRIG, HIGH);
@@ -49,21 +57,20 @@ void loop() {
   delay(20);
   Serial.print("Distance in cms = ");
   Serial.println(cm);
-        
+}
+
+void sense_serial()  {
   if (Serial.available() > 0) {
   incomingByte = Serial.read();
   lcd.print("Serial Data received: ");
   lcd.clear();
   lcd.setCursor(0, 0);
-  // print the number of seconds since reset:
   lcd.print(incomingByte);
   }
+}
 
-
-  // set the cursor to column 0, line 1
-  // (note: line 1 is the second row, since counting begins with 0):
+void toggle_led()  {
   lcd.setCursor(0, 1);
-  // print the number of seconds since reset:
   lcd.print(cm);
   digitalWrite(ledPin, HIGH);
   delay(100);
