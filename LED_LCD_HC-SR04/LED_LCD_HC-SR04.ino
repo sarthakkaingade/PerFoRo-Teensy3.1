@@ -23,8 +23,10 @@ const int TRIG = 0; // TRIGGER
 const int ECHO = 1;  // ECHO
 const int TRIG1 = 6; // TRIGGER
 const int ECHO1 = 7;  // ECHO
+const int TRIG2 = 8; // TRIGGER
+const int ECHO2 = 9;  // ECHO
 long distance;
-long cm[2];
+long cm[3];
 char incomingByte;
 char incomingStream[10];
 int i=0;
@@ -43,6 +45,8 @@ void setup() {
   pinMode(ECHO,INPUT);
   pinMode(TRIG1, OUTPUT);
   pinMode(ECHO1,INPUT);
+  pinMode(TRIG2, OUTPUT);
+  pinMode(ECHO2,INPUT);
   Serial.begin(38400);
 }
 
@@ -68,14 +72,24 @@ void sense_sonar()  {
   digitalWrite(TRIG1, LOW);
   distance = pulseIn(ECHO1, HIGH);
   cm[1]= distance/58;
+  delay(20);
+  digitalWrite(TRIG2, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG2, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG2, LOW);
+  distance = pulseIn(ECHO2, HIGH);
+  cm[2]= distance/58;
   lcd.clear();
   Serial.print("Distance in cms");
   lcd.print("PerFoRo!");
   lcd.setCursor(0, 1);
-  lcd.print("1=");
+  lcd.print(" ");
   lcd.print(cm[0]);
-  lcd.print(" 2=");
+  lcd.print(" ");
   lcd.print(cm[1]);
+  lcd.print(" ");
+  lcd.print(cm[2]);
 }
 
 void sense_serial()  {
