@@ -21,8 +21,10 @@ LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 const int ledPin =  13;
 const int TRIG = 0; // TRIGGER
 const int ECHO = 1;  // ECHO
+const int TRIG1 = 6; // TRIGGER
+const int ECHO1 = 7;  // ECHO
 long distance;
-long cm;
+long cm[2];
 char incomingByte;
 char incomingStream[10];
 int i=0;
@@ -39,6 +41,8 @@ void setup() {
   pinMode(ledPin, OUTPUT);
   pinMode(TRIG, OUTPUT);
   pinMode(ECHO,INPUT);
+  pinMode(TRIG1, OUTPUT);
+  pinMode(ECHO1,INPUT);
   Serial.begin(38400);
 }
 
@@ -55,13 +59,23 @@ void sense_sonar()  {
   delayMicroseconds(10);
   digitalWrite(TRIG, LOW);
   distance = pulseIn(ECHO, HIGH);
-  cm= distance/58;                        
+  cm[0]= distance/58;                        
   delay(20);
-  Serial.print("Distance in cms = ");
-  Serial.println(cm);
+  digitalWrite(TRIG1, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG1, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG1, LOW);
+  distance = pulseIn(ECHO1, HIGH);
+  cm[1]= distance/58;
+  lcd.clear();
+  Serial.print("Distance in cms");
+  lcd.print("PerFoRo!");
   lcd.setCursor(0, 1);
-  lcd.print("Distance(cm)=");
-  lcd.print(cm);
+  lcd.print("1=");
+  lcd.print(cm[0]);
+  lcd.print(" 2=");
+  lcd.print(cm[1]);
 }
 
 void sense_serial()  {
