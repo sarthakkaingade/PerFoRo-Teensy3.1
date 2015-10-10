@@ -7,6 +7,9 @@ const int PWM2 =  22;
 const int IN2A = 16;
 const int IN2B = 17;
 
+void front();
+void back();
+
 void setup()   {                
   pinMode(PWM1, OUTPUT);
   pinMode(IN1A, OUTPUT);
@@ -19,11 +22,28 @@ void setup()   {
 
 void loop()                     
 {
+  front();
+  delay(3000);
+  back();
+  delay(3000);
+}
+
+void front() 
+{
   analogWrite(PWM1, 250);
   digitalWrite(IN1A, HIGH);
   digitalWrite(IN1B, LOW);
   analogWrite(PWM2, 250);
   digitalWrite(IN2A, HIGH);
   digitalWrite(IN2B, LOW);
-  delay(500);
+}
+
+void back() 
+{
+  analogWrite(PWM1, 250);
+  digitalWrite(IN1A, LOW);
+  digitalWrite(IN1B, HIGH);
+  analogWrite(PWM2, 250);
+  digitalWrite(IN2A, LOW);
+  digitalWrite(IN2B, HIGH);
 }
