@@ -1,14 +1,16 @@
 /**PerFoRo DC Motor Control Module ***/
 
-const int PWM1 =  23;
+const int PWM1 = 23;
 const int IN1A = 14;
 const int IN1B = 15;
-const int PWM2 =  22;
+const int PWM2 = 22;
 const int IN2A = 16;
 const int IN2B = 17;
 
 void front();
 void back();
+void left();
+void right();
 
 void setup()   {                
   pinMode(PWM1, OUTPUT);
@@ -25,6 +27,10 @@ void loop()
   front();
   delay(3000);
   back();
+  delay(3000);
+  left();
+  delay(3000);
+  right();
   delay(3000);
 }
 
@@ -45,5 +51,25 @@ void back()
   digitalWrite(IN1B, HIGH);
   analogWrite(PWM2, 250);
   digitalWrite(IN2A, LOW);
+  digitalWrite(IN2B, HIGH);
+}
+
+void left() 
+{
+  analogWrite(PWM1, 250);
+  digitalWrite(IN1A, HIGH);
+  digitalWrite(IN1B, HIGH);
+  analogWrite(PWM2, 250);
+  digitalWrite(IN2A, HIGH);
+  digitalWrite(IN2B, LOW);
+}
+
+void right() 
+{
+  analogWrite(PWM1, 250);
+  digitalWrite(IN1A, HIGH);
+  digitalWrite(IN1B, LOW);
+  analogWrite(PWM2, 250);
+  digitalWrite(IN2A, HIGH);
   digitalWrite(IN2B, HIGH);
 }
