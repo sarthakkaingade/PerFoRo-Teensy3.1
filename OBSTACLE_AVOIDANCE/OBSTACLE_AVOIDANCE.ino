@@ -2,7 +2,7 @@
 // include the library code:
 #include <LiquidCrystal.h>
 
-#define  MOTOR_DELAY_HIGH    200
+#define  MOTOR_DELAY_HIGH    500
 #define  MOTOR_DELAY_MEDIUM  100
 #define  MOTOR_DELAY_LOW    50
 
@@ -61,9 +61,9 @@ void setup() {
 
 void loop() {
   left = sense_sonar(LEFT_TRIG,LEFT_ECHO);
-  delay(20);
+  delay(50);
   center = sense_sonar(CENTER_TRIG,CENTER_ECHO);
-  delay(20);
+  delay(50);
   right = sense_sonar(RIGHT_TRIG,RIGHT_ECHO);
   display_sonar();
   avoid_obstacle(left,center,right);
@@ -104,34 +104,51 @@ void avoid_obstacle(long left,long center, long right)  {
   }  else  {
     if ((left < 30) || (center < 30) || (right < 30))  {
         trap_count++;
-        move_back(MOTOR_DELAY_MEDIUM);
+        move_back(random(1000));
+        if ( (left < right) && (left < center) )  {
+          move_right(random(1000));
+        }  else  if ( (right < left) && (right < center) )  {
+          move_left(random(1000));
+        }  else  {
+          move_back(1000);
+          if ((random(1000) % 2) == 1) {
+            move_left(random(2000));
+          }  else  {
+            move_right(random(2000));
+          } 
+        }
     }  else if ((left > 50) && (center > 50) && (right > 50))  {
+        trap_count = 0;
         move_front(MOTOR_DELAY_MEDIUM);
     }  else if ((left > 50) && (center > 50) && (right < 50))  {
+        trap_count = 0;
         move_left(MOTOR_DELAY_MEDIUM);
     }  else if ((left > 50) && (center < 50) && (right > 50))  {
         trap_count++;
-        if ((center % 2) == 1) {
+        if ((random(1000) % 2) == 1) {
             move_left(MOTOR_DELAY_HIGH);
         }  else  {
             move_right(MOTOR_DELAY_HIGH);
         }
     }  else if ((left > 50) && (center < 50) && (right < 50))  {
-        move_left(MOTOR_DELAY_MEDIUM);
+        trap_count = 0;
+        move_left(MOTOR_DELAY_HIGH);
     }  else if ((left < 50) && (center > 50) && (right < 50))  {
+        trap_count = 0;
         move_right(MOTOR_DELAY_MEDIUM);
     }  else if ((left < 50) && (center > 50) && (right < 50))  {
         trap_count++;
-        if ((center % 2) == 1) {
+        if ((random(1000) % 2) == 1) {
             move_left(MOTOR_DELAY_HIGH);
         }  else  {
             move_right(MOTOR_DELAY_HIGH);
         }
     }  else if ((left < 50) && (center < 50) && (right > 50))  {
-        move_right(MOTOR_DELAY_MEDIUM);
+        trap_count = 0;
+        move_right(MOTOR_DELAY_HIGH);
     }  else if ((left < 50) && (center < 50) && (right < 50))  {
         trap_count++;
-        if ((center % 2) == 1) {
+        if ((random(1000) % 2) == 1) {
             move_left(MOTOR_DELAY_HIGH);
         }  else  {
             move_right(MOTOR_DELAY_HIGH);
@@ -144,13 +161,13 @@ void avoid_trap()  {
   lcd.clear();
   lcd.print("TRAP encountered");
   lcd.setCursor(0, 1);
-  move_back(2000);
-  if ((center % 2) == 1) {
+  move_back(1000);
+  if ((random(1000) % 2) == 1) {
       lcd.print("LEFT");
-      move_left(4000);
+      move_left(3000);
   }  else  {
       lcd.print("RIGHT");
-      move_right(4000);
+      move_right(3000);
   }
 }
 
