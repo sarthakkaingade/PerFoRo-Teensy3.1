@@ -25,7 +25,7 @@ long distance, cms;
 long left, center, right;
 char incomingByte;
 char incomingStream[10];
-int i=0;
+int i = 0, trap_count = 0;
 
 long sense_sonar(int TRIG, int ECHO);
 void display_sonar();
@@ -98,36 +98,58 @@ void display_sonar()  {
 }
 
 void avoid_obstacle(long left,long center, long right)  {
-  if ((left < 30) || (center < 30) || (right < 30))  {
-      move_back(MOTOR_DELAY_MEDIUM);
-  }  else if ((left > 50) && (center > 50) && (right > 50))  {
-      move_front(MOTOR_DELAY_MEDIUM);
-  }  else if ((left > 50) && (center > 50) && (right < 50))  {
-      move_left(MOTOR_DELAY_MEDIUM);
-  }  else if ((left > 50) && (center < 50) && (right > 50))  {
-      if ((center % 2) == 1) {
-          move_left(MOTOR_DELAY_HIGH);
-      }  else  {
-          move_right(MOTOR_DELAY_HIGH);
-      }
-  }  else if ((left > 50) && (center < 50) && (right < 50))  {
-      move_left(MOTOR_DELAY_MEDIUM);
-  }  else if ((left < 50) && (center > 50) && (right < 50))  {
-      move_right(MOTOR_DELAY_MEDIUM);
-  }  else if ((left < 50) && (center > 50) && (right < 50))  {
-      if ((center % 2) == 1) {
-          move_left(MOTOR_DELAY_HIGH);
-      }  else  {
-          move_right(MOTOR_DELAY_HIGH);
-      }
-  }  else if ((left < 50) && (center < 50) && (right > 50))  {
-      move_right(MOTOR_DELAY_MEDIUM);
-  }  else if ((left < 50) && (center < 50) && (right < 50))  {
-      if ((center % 2) == 1) {
-          move_left(MOTOR_DELAY_HIGH);
-      }  else  {
-          move_right(MOTOR_DELAY_HIGH);
-      }
+  if ( trap_count == 5)  {
+      trap_count = 0;
+      avoid_trap();
+  }  else  {
+    if ((left < 30) || (center < 30) || (right < 30))  {
+        move_back(MOTOR_DELAY_MEDIUM);
+    }  else if ((left > 50) && (center > 50) && (right > 50))  {
+        move_front(MOTOR_DELAY_MEDIUM);
+    }  else if ((left > 50) && (center > 50) && (right < 50))  {
+        move_left(MOTOR_DELAY_MEDIUM);
+    }  else if ((left > 50) && (center < 50) && (right > 50))  {
+        trap_count++;
+        if ((center % 2) == 1) {
+            move_left(MOTOR_DELAY_HIGH);
+        }  else  {
+            move_right(MOTOR_DELAY_HIGH);
+        }
+    }  else if ((left > 50) && (center < 50) && (right < 50))  {
+        move_left(MOTOR_DELAY_MEDIUM);
+    }  else if ((left < 50) && (center > 50) && (right < 50))  {
+        move_right(MOTOR_DELAY_MEDIUM);
+    }  else if ((left < 50) && (center > 50) && (right < 50))  {
+        trap_count++;
+        if ((center % 2) == 1) {
+            move_left(MOTOR_DELAY_HIGH);
+        }  else  {
+            move_right(MOTOR_DELAY_HIGH);
+        }
+    }  else if ((left < 50) && (center < 50) && (right > 50))  {
+        move_right(MOTOR_DELAY_MEDIUM);
+    }  else if ((left < 50) && (center < 50) && (right < 50))  {
+        trap_count++;
+        if ((center % 2) == 1) {
+            move_left(MOTOR_DELAY_HIGH);
+        }  else  {
+            move_right(MOTOR_DELAY_HIGH);
+        }
+    }
+  }
+}
+
+void avoid_trap()  {
+  lcd.clear();
+  lcd.print("TRAP encountered");
+  lcd.setCursor(0, 1);
+  move_back(2000);
+  if ((center % 2) == 1) {
+      lcd.print("LEFT");
+      move_left(1000);
+  }  else  {
+      lcd.print("RIGHT");
+      move_right(1000);
   }
 }
 
