@@ -2,6 +2,10 @@
 // include the library code:
 #include <LiquidCrystal.h>
 
+#define  MOTOR_DELAY_HIGH    200
+#define  MOTOR_DELAY_MEDIUM  100
+#define  MOTOR_DELAY_LOW    50
+
 // initialize the library with the numbers of the interface pins
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 const int ledPin =  13;
@@ -95,34 +99,34 @@ void display_sonar()  {
 
 void avoid_obstacle(long left,long center, long right)  {
   if ((left < 30) || (center < 30) || (right < 30))  {
-      move_back(100);
+      move_back(MOTOR_DELAY_MEDIUM);
   }  else if ((left > 50) && (center > 50) && (right > 50))  {
-      move_front(100);
+      move_front(MOTOR_DELAY_MEDIUM);
   }  else if ((left > 50) && (center > 50) && (right < 50))  {
-      move_left(100);
+      move_left(MOTOR_DELAY_MEDIUM);
   }  else if ((left > 50) && (center < 50) && (right > 50))  {
       if ((center % 2) == 1) {
-          move_left(100);
+          move_left(MOTOR_DELAY_HIGH);
       }  else  {
-          move_right(100);
+          move_right(MOTOR_DELAY_HIGH);
       }
   }  else if ((left > 50) && (center < 50) && (right < 50))  {
-      move_left(100);
+      move_left(MOTOR_DELAY_MEDIUM);
   }  else if ((left < 50) && (center > 50) && (right < 50))  {
-      move_right(100);
+      move_right(MOTOR_DELAY_MEDIUM);
   }  else if ((left < 50) && (center > 50) && (right < 50))  {
       if ((center % 2) == 1) {
-          move_left(100);
+          move_left(MOTOR_DELAY_HIGH);
       }  else  {
-          move_right(100);
+          move_right(MOTOR_DELAY_HIGH);
       }
   }  else if ((left < 50) && (center < 50) && (right > 50))  {
-      move_right(100);
+      move_right(MOTOR_DELAY_MEDIUM);
   }  else if ((left < 50) && (center < 50) && (right < 50))  {
       if ((center % 2) == 1) {
-          move_left(100);
+          move_left(MOTOR_DELAY_HIGH);
       }  else  {
-          move_right(100);
+          move_right(MOTOR_DELAY_HIGH);
       }
   }
 }
