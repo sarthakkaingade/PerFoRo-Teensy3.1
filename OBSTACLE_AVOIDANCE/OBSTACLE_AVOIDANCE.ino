@@ -5,12 +5,18 @@
 // initialize the library with the numbers of the interface pins
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 const int ledPin =  13;
-const int LEFT_TRIG = 0; // TRIGGER
-const int LEFT_ECHO = 1;  // ECHO
-const int CENTER_TRIG = 6; // TRIGGER
+const int LEFT_TRIG = 0;    // TRIGGER
+const int LEFT_ECHO = 1;    // ECHO
+const int CENTER_TRIG = 6;  // TRIGGER
 const int CENTER_ECHO = 7;  // ECHO
-const int RIGHT_TRIG = 8; // TRIGGER
-const int RIGHT_ECHO = 9;  // ECHO
+const int RIGHT_TRIG = 8;   // TRIGGER
+const int RIGHT_ECHO = 9;   // ECHO
+const int PWM1 = 23;        //LEFT MOTOR       
+const int IN1A = 14;
+const int IN1B = 15;
+const int PWM2 = 22;        //RIGHT MOTOR
+const int IN2A = 16;
+const int IN2B = 17;
 long distance, cms;
 long left, center, right;
 char incomingByte;
@@ -21,6 +27,10 @@ long sense_sonar(int TRIG, int ECHO);
 void display_sonar();
 void sense_serial();
 void toggle_led();
+void move_front();
+void move_back();
+void move_left();
+void move_right();
   
 void setup() {
   // set up the LCD's number of columns and rows: 
@@ -34,6 +44,13 @@ void setup() {
   pinMode(LEFT_ECHO,INPUT);
   pinMode(RIGHT_TRIG, OUTPUT);
   pinMode(RIGHT_ECHO,INPUT);
+  pinMode(PWM1, OUTPUT);
+  pinMode(IN1A, OUTPUT);
+  pinMode(IN1B, OUTPUT);
+  pinMode(PWM2, OUTPUT);
+  pinMode(IN2A, OUTPUT);
+  pinMode(IN2B, OUTPUT);
+  analogWriteResolution(10);
   Serial.begin(38400);
 }
 
@@ -44,6 +61,14 @@ void loop() {
   delay(20);
   right = sense_sonar(RIGHT_TRIG,RIGHT_ECHO);
   display_sonar();
+  move_front();
+  delay(1500);
+  move_back();
+  delay(1500);
+  move_left();
+  delay(1500);
+  move_right();
+  delay(1500);
   sense_serial();
   toggle_led();
 }
@@ -97,4 +122,44 @@ void toggle_led()  {
   delay(100);
   digitalWrite(ledPin, LOW);
   delay(100);
+}
+
+void move_front() 
+{
+  analogWrite(PWM1, 250);
+  digitalWrite(IN1A, HIGH);
+  digitalWrite(IN1B, LOW);
+  analogWrite(PWM2, 250);
+  digitalWrite(IN2A, HIGH);
+  digitalWrite(IN2B, LOW);
+}
+
+void move_back() 
+{
+  analogWrite(PWM1, 250);
+  digitalWrite(IN1A, LOW);
+  digitalWrite(IN1B, HIGH);
+  analogWrite(PWM2, 250);
+  digitalWrite(IN2A, LOW);
+  digitalWrite(IN2B, HIGH);
+}
+
+void move_left() 
+{
+  analogWrite(PWM1, 250);
+  digitalWrite(IN1A, HIGH);
+  digitalWrite(IN1B, HIGH);
+  analogWrite(PWM2, 250);
+  digitalWrite(IN2A, HIGH);
+  digitalWrite(IN2B, LOW);
+}
+
+void move_right() 
+{
+  analogWrite(PWM1, 250);
+  digitalWrite(IN1A, HIGH);
+  digitalWrite(IN1B, LOW);
+  analogWrite(PWM2, 250);
+  digitalWrite(IN2A, HIGH);
+  digitalWrite(IN2B, HIGH);
 }
