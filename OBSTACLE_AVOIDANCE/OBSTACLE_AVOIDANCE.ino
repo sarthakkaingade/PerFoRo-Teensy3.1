@@ -103,6 +103,7 @@ void avoid_obstacle(long left,long center, long right)  {
       avoid_trap();
   }  else  {
     if ((left < 30) || (center < 30) || (right < 30))  {
+        trap_count++;
         move_back(MOTOR_DELAY_MEDIUM);
     }  else if ((left > 50) && (center > 50) && (right > 50))  {
         move_front(MOTOR_DELAY_MEDIUM);
@@ -146,10 +147,10 @@ void avoid_trap()  {
   move_back(2000);
   if ((center % 2) == 1) {
       lcd.print("LEFT");
-      move_left(1000);
+      move_left(4000);
   }  else  {
       lcd.print("RIGHT");
-      move_right(1000);
+      move_right(4000);
   }
 }
 
