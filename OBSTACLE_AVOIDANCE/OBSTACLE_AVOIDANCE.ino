@@ -25,6 +25,7 @@ int i=0;
 
 long sense_sonar(int TRIG, int ECHO);
 void display_sonar();
+void avoid_obstacle(long left,long center, long right);
 void sense_serial();
 void toggle_led();
 void move_front();
@@ -61,14 +62,7 @@ void loop() {
   delay(20);
   right = sense_sonar(RIGHT_TRIG,RIGHT_ECHO);
   display_sonar();
-  move_front();
-  delay(1500);
-  move_back();
-  delay(1500);
-  move_left();
-  delay(1500);
-  move_right();
-  delay(1500);
+  avoid_obstacle(left,center,right);
   sense_serial();
   toggle_led();
 }
@@ -87,7 +81,7 @@ long sense_sonar(int TRIG, int ECHO)  {
   return cms;
 }
 
-void display_sonar() {
+void display_sonar()  {
   lcd.clear();
   lcd.print("PerFoRo!");
   lcd.setCursor(0, 1);
@@ -97,6 +91,40 @@ void display_sonar() {
   lcd.print(center);
   lcd.print(" ");
   lcd.print(right);
+}
+
+void avoid_obstacle(long left,long center, long right)  {
+  if ((left < 30) || (center < 30) || (right < 30))  {
+      move_back(100);
+  }  else if ((left > 50) && (center > 50) && (right > 50))  {
+      move_front(100);
+  }  else if ((left > 50) && (center > 50) && (right < 50))  {
+      move_left(100);
+  }  else if ((left > 50) && (center < 50) && (right > 50))  {
+      if ((center % 2) == 1) {
+          move_left(100);
+      }  else  {
+          move_right(100);
+      }
+  }  else if ((left > 50) && (center < 50) && (right < 50))  {
+      move_left(100);
+  }  else if ((left < 50) && (center > 50) && (right < 50))  {
+      move_right(100);
+  }  else if ((left < 50) && (center > 50) && (right < 50))  {
+      if ((center % 2) == 1) {
+          move_left(100);
+      }  else  {
+          move_right(100);
+      }
+  }  else if ((left < 50) && (center < 50) && (right > 50))  {
+      move_right(100);
+  }  else if ((left < 50) && (center < 50) && (right < 50))  {
+      if ((center % 2) == 1) {
+          move_left(100);
+      }  else  {
+          move_right(100);
+      }
+  }
 }
 
 void sense_serial()  {
@@ -124,7 +152,7 @@ void toggle_led()  {
   delay(100);
 }
 
-void move_front() 
+void move_front(int motor_delay) 
 {
   analogWrite(PWM1, 250);
   digitalWrite(IN1A, HIGH);
@@ -132,9 +160,10 @@ void move_front()
   analogWrite(PWM2, 250);
   digitalWrite(IN2A, HIGH);
   digitalWrite(IN2B, LOW);
+  delay(motor_delay);
 }
 
-void move_back() 
+void move_back(int motor_delay) 
 {
   analogWrite(PWM1, 250);
   digitalWrite(IN1A, LOW);
@@ -142,9 +171,10 @@ void move_back()
   analogWrite(PWM2, 250);
   digitalWrite(IN2A, LOW);
   digitalWrite(IN2B, HIGH);
+  delay(motor_delay);
 }
 
-void move_left() 
+void move_left(int motor_delay) 
 {
   analogWrite(PWM1, 250);
   digitalWrite(IN1A, HIGH);
@@ -152,9 +182,10 @@ void move_left()
   analogWrite(PWM2, 250);
   digitalWrite(IN2A, HIGH);
   digitalWrite(IN2B, LOW);
+  delay(motor_delay);
 }
 
-void move_right() 
+void move_right(int motor_delay) 
 {
   analogWrite(PWM1, 250);
   digitalWrite(IN1A, HIGH);
@@ -162,4 +193,5 @@ void move_right()
   analogWrite(PWM2, 250);
   digitalWrite(IN2A, HIGH);
   digitalWrite(IN2B, HIGH);
+  delay(motor_delay);
 }
