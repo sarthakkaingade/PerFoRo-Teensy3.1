@@ -24,8 +24,7 @@ const int IN2B = 17;
 long distance, cms;
 long left, center, right;
 int i = 0, trap_count = 0;
-int MODE = 0;
-int x;
+int MODE = 0,NAVIGATE = 0;
 String str;
 
 void obstacle_avoidance();
@@ -34,6 +33,7 @@ long sense_sonar(int TRIG, int ECHO);
 void display_sonar();
 void avoid_obstacle(long left,long center, long right);
 void sense_serial();
+void parse_serial(String str);
 void toggle_led();
 void move_front();
 void move_back();
@@ -188,19 +188,49 @@ void sense_serial()  {
         str += recieved;
 
         // Process message when new line character is recieved
-        if (recieved == '!')
-        {
-            lcd.clear();
-            lcd.setCursor(0, 0);
-            lcd.print("Data: ");
-            lcd.print(str);
-            lcd.setCursor(0, 1);
-            lcd.print("Length: ");
-            x = str.length();
-            lcd.print(x);
-            str = ""; // Clear recieved buffer
+        if (recieved == '!')  {
+          parse_serial(str);
+          str = ""; // Clear recieved buffer
         }
    }
+}
+
+void parse_serial(String str)  {
+  if (str.length() == 3)  {
+     lcd.clear();
+     lcd.setCursor(0, 0);
+     lcd.print("Data: ");
+     lcd.print(str);
+     lcd.setCursor(0, 1);
+     if (str[0] == 'M')  {
+       lcd.print("Mode: ");
+       if ((str[1] - 48) == 1)  {
+         MODE = 1;
+         lcd.print("MANUAL");
+       } else if ((str[1] - 48) == 2)  {
+         MODE = 1;
+         lcd.print("Obstacle Av");
+       } else if ((str[1] - 48) == 3)  {
+         MODE = 1;
+         lcd.print("STOP");
+       }
+     } else if (str[0] == 'N')  {
+       lcd.print("Navigate: ");
+       if ((str[1] - 48) == 1)  {
+         NAVIGATE = 1;
+         lcd.print("FRONT");
+       } else if ((str[1] - 48) == 2)  {
+         NAVIGATE = 2;
+         lcd.print("BACK");
+       } else if ((str[1] - 48) == 3)  {
+         NAVIGATE = 3;
+         lcd.print("LEFT");
+       } else if ((str[1] - 48) == 4)  {
+         NAVIGATE = 4;
+         lcd.print("RIGHT");
+       }
+     }
+  }
 }
 
 void toggle_led()  {
