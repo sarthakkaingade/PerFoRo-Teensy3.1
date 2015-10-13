@@ -45,6 +45,7 @@ void setup() {
   lcd.begin(16, 2);
   // Print a message to the LCD.
   lcd.print("PerFoRo!");
+  delay(2000);
   pinMode(ledPin, OUTPUT);
   pinMode(CENTER_TRIG, OUTPUT);
   pinMode(CENTER_ECHO,INPUT);
@@ -63,9 +64,32 @@ void setup() {
 }
 
 void loop() {
-  
   sense_serial();
+  if (MODE == 1)  {
+    control_manual();
+  } else if (MODE == 2)  {
+    obstacle_avoidance();
+  }
   toggle_led();
+}
+
+void control_manual()  {
+  lcd.setCursor(0, 1);
+  lcd.print("Navigate: ");
+  if (NAVIGATE == 1)  {
+    lcd.print("F");
+    move_front(MOTOR_DELAY_HIGH);
+  } else if (NAVIGATE == 2)  {
+    lcd.print("B");
+    move_back(MOTOR_DELAY_HIGH);
+  } else if (NAVIGATE == 3)  {
+    lcd.print("L");
+    move_left(MOTOR_DELAY_HIGH);
+  } else if (NAVIGATE == 4)  {
+    lcd.print("R");
+    move_right(MOTOR_DELAY_HIGH);
+  }
+  NAVIGATE = 0;
 }
 
 void obstacle_avoidance()  {
@@ -97,10 +121,7 @@ long sense_sonar(int TRIG, int ECHO)  {
 }
 
 void display_sonar()  {
-  lcd.clear();
-  lcd.print("PerFoRo!");
   lcd.setCursor(0, 1);
-  lcd.print(" ");
   lcd.print(left);
   lcd.print(" ");
   lcd.print(center);
@@ -169,16 +190,19 @@ void avoid_obstacle(long left,long center, long right)  {
 }
 
 void avoid_trap()  {
-  lcd.clear();
-  lcd.print("TRAP encountered");
-  lcd.setCursor(0, 1);
-  move_back(1000);
-  if ((random(1000) % 2) == 1) {
+  sense_serial();
+  if (MODE == 2)  {
+    lcd.clear();
+    lcd.print("TRAP encountered");
+    lcd.setCursor(0, 1);
+    move_back(1000);
+    if ((random(1000) % 2) == 1) {
       lcd.print("LEFT");
       move_left(3000);
-  }  else  {
+    }  else  {
       lcd.print("RIGHT");
       move_right(3000);
+    }
   }
 }
 
@@ -197,37 +221,30 @@ void sense_serial()  {
 
 void parse_serial(String str)  {
   if (str.length() == 3)  {
-     lcd.clear();
-     lcd.setCursor(0, 0);
-     lcd.print("Data: ");
-     lcd.print(str);
-     lcd.setCursor(0, 1);
      if (str[0] == 'M')  {
+       lcd.clear();
        lcd.print("Mode: ");
        if ((str[1] - 48) == 1)  {
          MODE = 1;
          lcd.print("MANUAL");
        } else if ((str[1] - 48) == 2)  {
-         MODE = 1;
-         lcd.print("Obstacle Av");
+         MODE = 2;
+         lcd.print("Obstacle A");
        } else if ((str[1] - 48) == 3)  {
-         MODE = 1;
+         MODE = 3;
          lcd.print("STOP");
        }
      } else if (str[0] == 'N')  {
-       lcd.print("Navigate: ");
-       if ((str[1] - 48) == 1)  {
-         NAVIGATE = 1;
-         lcd.print("FRONT");
-       } else if ((str[1] - 48) == 2)  {
-         NAVIGATE = 2;
-         lcd.print("BACK");
-       } else if ((str[1] - 48) == 3)  {
-         NAVIGATE = 3;
-         lcd.print("LEFT");
-       } else if ((str[1] - 48) == 4)  {
-         NAVIGATE = 4;
-         lcd.print("RIGHT");
+       if (MODE == 1)  {
+         if ((str[1] - 48) == 1)  {
+           NAVIGATE = 1;
+         } else if ((str[1] - 48) == 2)  {
+           NAVIGATE = 2;
+         } else if ((str[1] - 48) == 3)  {
+           NAVIGATE = 3;
+         } else if ((str[1] - 48) == 4)  {
+           NAVIGATE = 4;
+         }
        }
      }
   }
