@@ -23,10 +23,10 @@ const int IN2A = 16;
 const int IN2B = 17;
 long distance, cms;
 long left, center, right;
-char incomingByte;
-char incomingStream[10];
 int i = 0, trap_count = 0;
 int MODE = 0;
+int x;
+String str;
 
 void obstacle_avoidance();
 void sense_sonars();
@@ -183,21 +183,24 @@ void avoid_trap()  {
 }
 
 void sense_serial()  {
-  if (Serial.available() > 0) {
-    incomingByte = Serial.read();
-    if ( incomingByte == 32 || i == 10 ) {
-      lcd.clear();
-      lcd.setCursor(0, 0);
-      lcd.print("Data: ");
-      for ( int j = 0; j < i; j++ )  {
-        lcd.print(incomingStream[j]);
-      }
-      i = 0;
-    } else {
-      incomingStream[i] = incomingByte;
-      i++;
-    }
-  }
+  if(Serial.available() > 0)  {
+        char recieved = Serial.read();
+        str += recieved;
+
+        // Process message when new line character is recieved
+        if (recieved == '!')
+        {
+            lcd.clear();
+            lcd.setCursor(0, 0);
+            lcd.print("Data: ");
+            lcd.print(str);
+            lcd.setCursor(0, 1);
+            lcd.print("Length: ");
+            x = str.length();
+            lcd.print(x);
+            str = ""; // Clear recieved buffer
+        }
+   }
 }
 
 void toggle_led()  {
