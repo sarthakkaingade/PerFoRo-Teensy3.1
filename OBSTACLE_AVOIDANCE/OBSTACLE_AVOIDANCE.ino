@@ -4,7 +4,8 @@
 
 #define  MOTOR_DELAY_HIGH    500
 #define  MOTOR_DELAY_MEDIUM  100
-#define  MOTOR_DELAY_LOW    50
+#define  MOTOR_DELAY_LOW     50
+#define  MOTOR_SPEED         500
 
 // initialize the library with the numbers of the interface pins
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
@@ -198,10 +199,10 @@ void toggle_led()  {
 
 void move_front(int motor_delay) 
 {
-  analogWrite(PWM1, 250);
+  analogWrite(PWM1, MOTOR_SPEED);
   digitalWrite(IN1A, HIGH);
   digitalWrite(IN1B, LOW);
-  analogWrite(PWM2, 250);
+  analogWrite(PWM2, MOTOR_SPEED);
   digitalWrite(IN2A, HIGH);
   digitalWrite(IN2B, LOW);
   delay(motor_delay);
@@ -209,10 +210,10 @@ void move_front(int motor_delay)
 
 void move_back(int motor_delay) 
 {
-  analogWrite(PWM1, 250);
+  analogWrite(PWM1, MOTOR_SPEED);
   digitalWrite(IN1A, LOW);
   digitalWrite(IN1B, HIGH);
-  analogWrite(PWM2, 250);
+  analogWrite(PWM2, MOTOR_SPEED);
   digitalWrite(IN2A, LOW);
   digitalWrite(IN2B, HIGH);
   delay(motor_delay);
@@ -220,10 +221,10 @@ void move_back(int motor_delay)
 
 void move_left(int motor_delay) 
 {
-  analogWrite(PWM1, 250);
+  analogWrite(PWM1, MOTOR_SPEED);
   digitalWrite(IN1A, HIGH);
   digitalWrite(IN1B, HIGH);
-  analogWrite(PWM2, 250);
+  analogWrite(PWM2, MOTOR_SPEED);
   digitalWrite(IN2A, HIGH);
   digitalWrite(IN2B, LOW);
   delay(motor_delay);
@@ -231,10 +232,10 @@ void move_left(int motor_delay)
 
 void move_right(int motor_delay) 
 {
-  analogWrite(PWM1, 250);
+  analogWrite(PWM1, MOTOR_SPEED);
   digitalWrite(IN1A, HIGH);
   digitalWrite(IN1B, LOW);
-  analogWrite(PWM2, 250);
+  analogWrite(PWM2, MOTOR_SPEED);
   digitalWrite(IN2A, HIGH);
   digitalWrite(IN2B, HIGH);
   delay(motor_delay);
