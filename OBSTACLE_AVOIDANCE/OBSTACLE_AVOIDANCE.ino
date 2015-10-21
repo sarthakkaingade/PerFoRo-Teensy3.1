@@ -2,10 +2,10 @@
 // include the library code:
 #include <LiquidCrystal.h>
 
-#define  MOTOR_DELAY_HIGH    500
+#define  MOTOR_DELAY_HIGH    200
 #define  MOTOR_DELAY_MEDIUM  100
 #define  MOTOR_DELAY_LOW     50
-#define  MOTOR_SPEED         500
+#define  MOTOR_SPEED         350
 
 // initialize the library with the numbers of the interface pins
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
@@ -62,9 +62,9 @@ void setup() {
 
 void loop() {
   left = sense_sonar(LEFT_TRIG,LEFT_ECHO);
-  delay(50);
+  delay(20);
   center = sense_sonar(CENTER_TRIG,CENTER_ECHO);
-  delay(50);
+  delay(20);
   right = sense_sonar(RIGHT_TRIG,RIGHT_ECHO);
   display_sonar();
   avoid_obstacle(left,center,right);
