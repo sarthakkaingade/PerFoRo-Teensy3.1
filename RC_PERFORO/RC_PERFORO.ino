@@ -258,7 +258,7 @@ void parse_serial(String str)  {
          MODE = 3;
          lcd.print("FOLLOW ME");
        } else if ((str[1] - 48) == 4)  {
-         MODE = 3;
+         MODE = 4;
          lcd.print("STOP");
        }
      } else if (str[0] == 'N')  {
@@ -312,10 +312,10 @@ void move_left(int motor_delay)
 {
   analogWrite(PWM1, MOTOR_SPEED);
   digitalWrite(IN1A, HIGH);
-  digitalWrite(IN1B, HIGH);
+  digitalWrite(IN1B, LOW);
   analogWrite(PWM2, MOTOR_SPEED);
   digitalWrite(IN2A, HIGH);
-  digitalWrite(IN2B, LOW);
+  digitalWrite(IN2B, HIGH);
   delay(motor_delay);
 }
 
@@ -323,10 +323,10 @@ void move_right(int motor_delay)
 {
   analogWrite(PWM1, MOTOR_SPEED);
   digitalWrite(IN1A, HIGH);
-  digitalWrite(IN1B, LOW);
+  digitalWrite(IN1B, HIGH);
   analogWrite(PWM2, MOTOR_SPEED);
   digitalWrite(IN2A, HIGH);
-  digitalWrite(IN2B, HIGH);
+  digitalWrite(IN2B, LOW);
   delay(motor_delay);
 }
 
