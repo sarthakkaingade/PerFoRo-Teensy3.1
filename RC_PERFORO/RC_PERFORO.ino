@@ -119,6 +119,7 @@ void follow_me()  {
     lcd.print("C");
     motor_stop();
   }
+  motor_stop();
 }
 
 void sense_sonars()  {
