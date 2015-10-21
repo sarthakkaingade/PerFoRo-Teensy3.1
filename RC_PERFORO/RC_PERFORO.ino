@@ -2,10 +2,11 @@
 // include the library code:
 #include <LiquidCrystal.h>
 
-#define  MOTOR_DELAY_HIGH    500
-#define  MOTOR_DELAY_MEDIUM  100
-#define  MOTOR_DELAY_LOW     50
-#define  MOTOR_SPEED         250
+#define  MOTOR_DELAY_HIGH        200
+#define  MOTOR_DELAY_MEDIUM      100
+#define  MOTOR_DELAY_LOW         50
+#define  MOTOR_SPEED             250
+#define  MOTOR_DELAY_FOLLOW_ME   100
 
 // initialize the library with the numbers of the interface pins
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
@@ -28,7 +29,9 @@ int i = 0, trap_count = 0;
 int MODE = 0,NAVIGATE = 0;
 String str;
 
+void control_manual();
 void obstacle_avoidance();
+void follow_me();
 void sense_sonars();
 long sense_sonar(int TRIG, int ECHO);
 void display_sonar();
@@ -71,7 +74,9 @@ void loop() {
     control_manual();
   } else if (MODE == 2)  {
     obstacle_avoidance();
-  }  else if (MODE == 3)  {
+  } else if (MODE == 3)  {
+    follow_me();
+  } else if (MODE == 4)  {
     motor_stop();
   }
   toggle_led();
@@ -99,6 +104,21 @@ void control_manual()  {
 void obstacle_avoidance()  {
   sense_sonars();
   avoid_obstacle(left,center,right);
+}
+
+void follow_me()  {
+  lcd.setCursor(0, 1);
+  lcd.print(" ");
+  if (NAVIGATE == 3)  {
+    lcd.print("L");
+    move_left(MOTOR_DELAY_FOLLOW_ME);
+  } else if (NAVIGATE == 4)  {
+    lcd.print("R");
+    move_right(MOTOR_DELAY_FOLLOW_ME);
+  } else if (NAVIGATE == 0)  {
+    lcd.print("C");
+    motor_stop();
+  }
 }
 
 void sense_sonars()  {
@@ -236,10 +256,13 @@ void parse_serial(String str)  {
          lcd.print("Obstacle A");
        } else if ((str[1] - 48) == 3)  {
          MODE = 3;
+         lcd.print("FOLLOW ME");
+       } else if ((str[1] - 48) == 4)  {
+         MODE = 3;
          lcd.print("STOP");
        }
      } else if (str[0] == 'N')  {
-       if (MODE == 1)  {
+       if ((MODE == 1) || (MODE == 3))  {
          if ((str[1] - 48) == 1)  {
            NAVIGATE = 1;
          } else if ((str[1] - 48) == 2)  {
@@ -248,6 +271,8 @@ void parse_serial(String str)  {
            NAVIGATE = 3;
          } else if ((str[1] - 48) == 4)  {
            NAVIGATE = 4;
+         } else if ((str[1] - 48) == 0)  {
+           NAVIGATE = 0;
          }
        }
      }
