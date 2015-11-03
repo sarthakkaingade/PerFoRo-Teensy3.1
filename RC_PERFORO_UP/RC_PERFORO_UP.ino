@@ -265,6 +265,7 @@ void parse_serial(String str)  {
          MODE = 4;
          lcd.print("STOP");
        }
+       NAVIGATE = 0;
      } else if (str[0] == 'N')  {
        if ((MODE == 1) || (MODE == 3))  {
          if ((str[1] - 48) == 1)  {
