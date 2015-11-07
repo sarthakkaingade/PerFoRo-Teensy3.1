@@ -5,7 +5,7 @@
 #define  MOTOR_DELAY_HIGH        200
 #define  MOTOR_DELAY_MEDIUM      100
 #define  MOTOR_DELAY_LOW         50
-#define  MOTOR_SPEED             250
+#define  MOTOR_SPEED             350
 #define  MOTOR_DELAY_FOLLOW_ME   100
 
 // initialize the library with the numbers of the interface pins
