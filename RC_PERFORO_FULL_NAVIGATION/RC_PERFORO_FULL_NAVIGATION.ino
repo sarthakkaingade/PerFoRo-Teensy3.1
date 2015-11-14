@@ -97,6 +97,9 @@ void control_manual()  {
   } else if (NAVIGATE == 4)  {
     lcd.print("R");
     move_right(MOTOR_DELAY_HIGH);
+  } else if (NAVIGATE == 5)  {
+    lcd.print("C");
+    motor_stop();
   }
   NAVIGATE = 0;
 }
@@ -266,6 +269,9 @@ void parse_serial(String str)  {
          lcd.print("FOLLOW ME");
        } else if ((str[1] - 48) == 4)  {
          MODE = 4;
+         lcd.print("DOCK");
+       } else if ((str[1] - 48) == 5)  {
+         MODE = 5;
          lcd.print("STOP");
        }
        NAVIGATE = 0;
@@ -279,6 +285,8 @@ void parse_serial(String str)  {
            NAVIGATE = 3;
          } else if ((str[1] - 48) == 4)  {
            NAVIGATE = 4;
+         } else if ((str[1] - 48) == 5)  {
+           NAVIGATE = 5;
          } else if ((str[1] - 48) == 0)  {
            NAVIGATE = 0;
          }
