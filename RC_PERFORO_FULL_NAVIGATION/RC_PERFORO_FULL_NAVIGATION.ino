@@ -78,6 +78,8 @@ void loop() {
     follow_me();
   } else if (MODE == 4)  {
     motor_stop();
+  } else if (MODE == 5)  {
+    motor_stop();
   }
   toggle_led();
 }
