@@ -30,6 +30,7 @@ int MODE = 0,NAVIGATE = 0;
 String str;
 
 void control_manual();
+void dock_mode();
 void obstacle_avoidance();
 void follow_me();
 void sense_sonars();
@@ -77,7 +78,7 @@ void loop() {
   } else if (MODE == 3)  {
     follow_me();
   } else if (MODE == 4)  {
-    motor_stop();
+    dock_mode();
   } else if (MODE == 5)  {
     motor_stop();
   }
@@ -85,6 +86,28 @@ void loop() {
 }
 
 void control_manual()  {
+  lcd.setCursor(0, 1);
+  lcd.print("Navigate: ");
+  if (NAVIGATE == 1)  {
+    lcd.print("F");
+    move_front(MOTOR_DELAY_HIGH);
+  } else if (NAVIGATE == 2)  {
+    lcd.print("B");
+    move_back(MOTOR_DELAY_HIGH);
+  } else if (NAVIGATE == 3)  {
+    lcd.print("L");
+    move_left(MOTOR_DELAY_HIGH);
+  } else if (NAVIGATE == 4)  {
+    lcd.print("R");
+    move_right(MOTOR_DELAY_HIGH);
+  } else if (NAVIGATE == 5)  {
+    lcd.print("C");
+    motor_stop();
+  }
+  NAVIGATE = 0;
+}
+
+void dock_mode()  {
   lcd.setCursor(0, 1);
   lcd.print("Navigate: ");
   if (NAVIGATE == 1)  {
