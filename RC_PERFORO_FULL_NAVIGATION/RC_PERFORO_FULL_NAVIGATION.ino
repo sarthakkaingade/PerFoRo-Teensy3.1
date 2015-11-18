@@ -301,7 +301,7 @@ void parse_serial(String str)  {
        }
        NAVIGATE = 0;
      } else if (str[0] == 'N')  {
-       if ((MODE == 1) || (MODE == 3))  {
+       if ((MODE == 1) || (MODE == 3) || (MODE == 4))  {
          if ((str[1] - 48) == 1)  {
            NAVIGATE = 1;
          } else if ((str[1] - 48) == 2)  {
