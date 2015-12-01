@@ -329,7 +329,7 @@ void toggle_led()  {
 
 void move_front(int motor_delay) 
 {
-  analogWrite(PWM1, MOTOR_SPEED);
+  analogWrite(PWM1, MOTOR_SPEED * 1.2);
   digitalWrite(IN1A, HIGH);
   digitalWrite(IN1B, LOW);
   analogWrite(PWM2, MOTOR_SPEED);
